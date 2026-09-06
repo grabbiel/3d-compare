@@ -18,8 +18,8 @@ export const FEET_CATALOG: readonly FootCatalogEntry[] = [
     recipe: {
       sex: 'female',
       lastWidth: 'narrow',
-      ankleWidth: 0.062,
-      archHeight: 0.022,
+      ankleWidth: 0.25,
+      archHeight: 0.09,
       skinHex: '#c98f70',
       accentHex: '#a65d4e',
     },
@@ -34,8 +34,8 @@ export const FEET_CATALOG: readonly FootCatalogEntry[] = [
     recipe: {
       sex: 'male',
       lastWidth: 'wide',
-      ankleWidth: 0.078,
-      archHeight: 0.027,
+      ankleWidth: 0.29,
+      archHeight: 0.1,
       skinHex: '#9c6a51',
       accentHex: '#355863',
     },

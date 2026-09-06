@@ -1,0 +1,92 @@
+import { MapControls } from '@react-three/drei'
+import { useThree } from '@react-three/fiber'
+import { useEffect, useRef, type ComponentRef } from 'react'
+import * as THREE from 'three'
+import type { NavRig } from '../../app/compare-app.ts'
+import type { FeetWorld } from '../../domain/feet-world.ts'
+import type { FeetInspectSnapshot } from '../../domain/navigation.ts'
+
+function defaultView(): FeetInspectSnapshot {
+  return {
+    kind: 'inspect',
+    target: [0, 0.04, 0],
+    position: [0, 1.45, 0.62],
+  }
+}
+
+function selectionView(world: FeetWorld): FeetInspectSnapshot {
+  const selected = world.placements.find((placement) => placement.id === world.selected)
+  if (!selected) {
+    return defaultView()
+  }
+
+  return {
+    kind: 'inspect',
+    target: [selected.pose.x, 0.04, selected.pose.z],
+    position: [selected.pose.x, 0.82, selected.pose.z + 0.34],
+  }
+}
+
+export function FeetInspectRig({ world, rig }: { world: FeetWorld; rig: NavRig }) {
+  const controls = useRef<ComponentRef<typeof MapControls>>(null)
+  const initialized = useRef(false)
+  const { camera } = useThree()
+
+  function apply(snapshot: FeetInspectSnapshot): void {
+    camera.position.set(...snapshot.position)
+    camera.near = 0.005
+    camera.far = 20
+    camera.updateProjectionMatrix()
+    controls.current?.target.set(...snapshot.target)
+    controls.current?.update()
+  }
+
+  useEffect(() => {
+    if (initialized.current) {
+      return
+    }
+
+    const saved = world.savedNav
+    apply(saved?.kind === 'inspect' ? saved : defaultView())
+    initialized.current = true
+  })
+
+  useEffect(() => {
+    if (world.cameraIntent.kind === 'none') {
+      return
+    }
+
+    const intent = rig.consumeFeetIntent()
+    if (intent.kind === 'frame-selection') {
+      apply(selectionView(world))
+    } else if (intent.kind === 'reset') {
+      apply(defaultView())
+    } else if (intent.kind === 'restore' && intent.snapshot.kind === 'inspect') {
+      apply(intent.snapshot)
+    }
+  }, [rig, world, world.cameraIntent])
+
+  function snapshot(): FeetInspectSnapshot {
+    const target = controls.current?.target ?? new THREE.Vector3(0, 0.04, 0)
+    return {
+      kind: 'inspect',
+      target: [target.x, target.y, target.z],
+      position: [camera.position.x, camera.position.y, camera.position.z],
+    }
+  }
+
+  return (
+    <MapControls
+      ref={controls}
+      makeDefault
+      enableDamping
+      dampingFactor={0.1}
+      enableRotate={false}
+      screenSpacePanning={false}
+      minDistance={0.2}
+      maxDistance={2.5}
+      target={[0, 0.04, 0]}
+      onEnd={() => rig.commitFeetSnapshot(snapshot())}
+    />
+  )
+}

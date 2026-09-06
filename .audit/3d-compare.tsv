@@ -2,3 +2,4 @@ ts	phase	decision	why	evidence	result
 2026-09-06T20:06:26Z	frame	fast-forwarded the supplied Vite scaffold onto main	the user required the existing development line and direct main delivery	commit 6b692ce	scaffold pushed to origin/main
 2026-09-06T20:06:26Z	frame	kept the supplied candidate-3 architecture	the arena already compared four shapes and picked typed dual worlds with R3F	.design/SYNTHESIS.md	design accepted
 2026-09-06T20:06:26Z	baseline	built the unmodified scaffold before feature work	the baseline separates setup failures from implementation failures	npm run build	baseline passed
+2026-09-06T20:16:22Z	domain	implemented branded measurements, typed catalogs, dual worlds, shoe charts, commands, and safe persistence	the stable document contract lets scenes and UI consume one source of truth	commit bce45c5	npm run verify:domain and npm run build passed
