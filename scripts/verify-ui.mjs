@@ -34,7 +34,7 @@ try {
   await page.evaluate(() => localStorage.clear())
   await page.reload({ waitUntil: 'networkidle' })
   await page.locator('.scene-empty').waitFor({ state: 'visible', timeout: 20_000 })
-  assert.equal(await page.locator('canvas#compare-stage').count(), 1)
+  assert.equal(await page.locator('#compare-stage canvas').count(), 1)
   assert.match(await page.locator('.stage-title strong').innerText(), /Concrete studio/)
 
   await page.getByRole('button', { name: 'Add Ari', exact: true }).click()
@@ -88,7 +88,7 @@ try {
 
   await page.setViewportSize({ width: 390, height: 844 })
   await page.reload({ waitUntil: 'networkidle' })
-  await page.locator('canvas#compare-stage').waitFor({ state: 'visible', timeout: 20_000 })
+  await page.locator('#compare-stage canvas').waitFor({ state: 'visible', timeout: 20_000 })
   assert.equal(await page.locator('.lineup-list li').count(), 2)
   const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth)
   assert.ok(scrollWidth <= 390, `Mobile layout overflows to ${scrollWidth}px.`)
