@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import type { CompareApp } from '../app/compare-app.ts'
 import { footEntry } from '../catalog/feet.ts'
 import { humanEntry } from '../catalog/humans.ts'
@@ -45,22 +45,15 @@ function HeightInspector({
   document: CompareDocument
 }) {
   const placement = selectedHuman(document.height)
-  const [centimeters, setCentimeters] = useState('')
-  const [feet, setFeet] = useState('')
-  const [inches, setInches] = useState('')
+  const initialImperial = placement
+    ? splitImperialHeight(placement.heightMm)
+    : { feet: 0, inches: 0 }
+  const [centimeters, setCentimeters] = useState(
+    placement ? String(heightInCentimeters(placement.heightMm)) : '',
+  )
+  const [feet, setFeet] = useState(String(initialImperial.feet))
+  const [inches, setInches] = useState(String(initialImperial.inches))
   const [error, setError] = useState('')
-
-  useEffect(() => {
-    if (!placement) {
-      return
-    }
-
-    const imperial = splitImperialHeight(placement.heightMm)
-    setCentimeters(String(heightInCentimeters(placement.heightMm)))
-    setFeet(String(imperial.feet))
-    setInches(String(imperial.inches))
-    setError('')
-  }, [placement])
 
   if (!placement) {
     return (
@@ -69,16 +62,17 @@ function HeightInspector({
   }
 
   const entry = humanEntry(placement.catalogId)
+  const placementId = placement.id
 
   function submit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault()
     const result =
       document.heightUnit === 'cm'
-        ? app.updateHumanHeight(placement.id, {
+        ? app.updateHumanHeight(placementId, {
             unit: 'cm',
             value: Number(centimeters),
           })
-        : app.updateHumanHeight(placement.id, {
+        : app.updateHumanHeight(placementId, {
             unit: 'ftin',
             feet: Number(feet),
             inches: Number(inches),
@@ -187,8 +181,6 @@ function FootInspector({
   const placement = selectedFoot(document.feet)
   const [error, setError] = useState('')
 
-  useEffect(() => setError(''), [placement, document.shoeSystem])
-
   if (!placement) {
     return <EmptyInspector mode="feet" hasPlacements={document.feet.placements.length > 0} />
   }
@@ -267,8 +259,16 @@ export function Inspector({
   document: CompareDocument
 }) {
   return document.mode === 'height' ? (
-    <HeightInspector app={app} document={document} />
+    <HeightInspector
+      key={`${document.height.selected ?? 'none'}-${document.heightUnit}`}
+      app={app}
+      document={document}
+    />
   ) : (
-    <FootInspector app={app} document={document} />
+    <FootInspector
+      key={`${document.feet.selected ?? 'none'}-${document.shoeSystem}`}
+      app={app}
+      document={document}
+    />
   )
 }

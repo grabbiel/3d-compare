@@ -1,6 +1,6 @@
 import { OrbitControls } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
-import { useEffect, useRef, type ComponentRef } from 'react'
+import { useCallback, useEffect, useRef, type ComponentRef } from 'react'
 import * as THREE from 'three'
 import type { NavRig } from '../../app/compare-app.ts'
 import type { HeightWorld } from '../../domain/height-world.ts'
@@ -50,14 +50,17 @@ export function HeightOrbitRig({
   const initialized = useRef(false)
   const { camera } = useThree()
 
-  function apply(snapshot: HeightOrbitSnapshot): void {
-    camera.position.set(...snapshot.position)
-    camera.near = 0.03
-    camera.far = 60
-    camera.updateProjectionMatrix()
-    controls.current?.target.set(...snapshot.target)
-    controls.current?.update()
-  }
+  const apply = useCallback(
+    (snapshot: HeightOrbitSnapshot): void => {
+      camera.position.set(...snapshot.position)
+      camera.near = 0.03
+      camera.far = 60
+      camera.updateProjectionMatrix()
+      controls.current?.target.set(...snapshot.target)
+      controls.current?.update()
+    },
+    [camera],
+  )
 
   useEffect(() => {
     if (initialized.current) {
@@ -82,7 +85,7 @@ export function HeightOrbitRig({
     } else if (intent.kind === 'restore' && intent.snapshot.kind === 'orbit') {
       apply(intent.snapshot)
     }
-  }, [rig, world, world.cameraIntent])
+  }, [apply, rig, world, world.cameraIntent])
 
   function snapshot(): HeightOrbitSnapshot {
     const target = controls.current?.target ?? new THREE.Vector3(0, 0.95, 0)

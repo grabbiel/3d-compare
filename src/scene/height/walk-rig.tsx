@@ -1,6 +1,6 @@
 import { PointerLockControls } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import type { NavRig } from '../../app/compare-app.ts'
 import type { HeightWorld } from '../../domain/height-world.ts'
@@ -27,20 +27,23 @@ export function HeightWalkRig({
   const keys = useRef(new Set<string>())
   const initialized = useRef(false)
 
-  function apply(snapshot: HeightWalkSnapshot): void {
-    camera.position.set(...snapshot.eye)
-    camera.rotation.set(snapshot.pitch, snapshot.yaw, 0, 'YXZ')
-    camera.near = 0.03
-    camera.far = 60
-    camera.updateProjectionMatrix()
-  }
+  const apply = useCallback(
+    (snapshot: HeightWalkSnapshot): void => {
+      camera.position.set(...snapshot.eye)
+      camera.rotation.set(snapshot.pitch, snapshot.yaw, 0, 'YXZ')
+      camera.near = 0.03
+      camera.far = 60
+      camera.updateProjectionMatrix()
+    },
+    [camera],
+  )
 
-  function reset(): void {
+  const reset = useCallback((): void => {
     camera.position.set(0, DEFAULT_WALK_EYE_M, 3.4)
     camera.lookAt(0, 1.35, 0)
-  }
+  }, [camera])
 
-  function frameSelection(): void {
+  const frameSelection = useCallback((): void => {
     const selected = world.placements.find((placement) => placement.id === world.selected)
     if (!selected) {
       reset()
@@ -50,7 +53,7 @@ export function HeightWalkRig({
     const height = selected.heightMm / 1000
     camera.position.set(selected.pose.x, DEFAULT_WALK_EYE_M, selected.pose.z + 2.25)
     camera.lookAt(selected.pose.x, Math.min(height * 0.72, DEFAULT_WALK_EYE_M), selected.pose.z)
-  }
+  }, [camera, reset, world.placements, world.selected])
 
   useEffect(() => {
     if (initialized.current) {
@@ -104,7 +107,7 @@ export function HeightWalkRig({
     } else if (intent.kind === 'restore' && intent.snapshot.kind === 'walk') {
       apply(intent.snapshot)
     }
-  }, [rig, world, world.cameraIntent])
+  }, [apply, frameSelection, reset, rig, world.cameraIntent])
 
   useFrame((_, delta) => {
     const forwardInput =

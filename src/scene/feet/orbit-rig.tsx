@@ -1,6 +1,6 @@
 import { OrbitControls } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
-import { useEffect, useRef, type ComponentRef } from 'react'
+import { useCallback, useEffect, useRef, type ComponentRef } from 'react'
 import * as THREE from 'three'
 import type { NavRig } from '../../app/compare-app.ts'
 import type { FeetWorld } from '../../domain/feet-world.ts'
@@ -37,14 +37,17 @@ export function FeetOrbitRig({ world, rig }: { world: FeetWorld; rig: NavRig }) 
   const initialized = useRef(false)
   const { camera } = useThree()
 
-  function apply(snapshot: FeetOrbitSnapshot): void {
-    camera.position.set(...snapshot.position)
-    camera.near = 0.005
-    camera.far = 20
-    camera.updateProjectionMatrix()
-    controls.current?.target.set(...snapshot.target)
-    controls.current?.update()
-  }
+  const apply = useCallback(
+    (snapshot: FeetOrbitSnapshot): void => {
+      camera.position.set(...snapshot.position)
+      camera.near = 0.005
+      camera.far = 20
+      camera.updateProjectionMatrix()
+      controls.current?.target.set(...snapshot.target)
+      controls.current?.update()
+    },
+    [camera],
+  )
 
   useEffect(() => {
     if (initialized.current) {
@@ -69,7 +72,7 @@ export function FeetOrbitRig({ world, rig }: { world: FeetWorld; rig: NavRig }) 
     } else if (intent.kind === 'restore' && intent.snapshot.kind === 'orbit') {
       apply(intent.snapshot)
     }
-  }, [rig, world, world.cameraIntent])
+  }, [apply, rig, world, world.cameraIntent])
 
   function snapshot(): FeetOrbitSnapshot {
     const target = controls.current?.target ?? new THREE.Vector3(0, 0.08, 0)
