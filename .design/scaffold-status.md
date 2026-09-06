@@ -35,6 +35,13 @@ Resolved versions after install:
 
 Vite template files now live at `/workspace`, not in a nested app directory. `/workspace/.git` and `/workspace/.design` were not replaced.
 
+## Verification after install
+
+- `npm run build` (`tsc -b && vite build`) exited 0. The production CSS starts with `/*! tailwindcss v4.3.3`.
+- `npm run dev` served `http://127.0.0.1:43123/` with HTTP 200 and the Vite `index.html` that loads `/src/main.tsx`.
+
+I did not click through the default Vite UI in a browser. The checks above used `npm run build` and `curl` against the running dev server.
+
 ## Errors
 
-None during create, move, or install.
+None during create, move, install, build, or the dev-server request.
