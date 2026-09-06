@@ -9,9 +9,11 @@ import { HeightWorldView } from './height/world-view.tsx'
 export function CompareCanvas({
   app,
   document,
+  onReady,
 }: {
   app: CompareApp
   document: CompareDocument
+  onReady(): void
 }) {
   return (
     <Canvas
@@ -21,6 +23,7 @@ export function CompareCanvas({
       camera={{ position: [4, 2.4, 6], fov: 38, near: 0.01, far: 60 }}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
       onPointerMissed={() => app.select(null)}
+      onCreated={onReady}
     >
       <Suspense fallback={null}>
         {document.mode === 'height' ? (

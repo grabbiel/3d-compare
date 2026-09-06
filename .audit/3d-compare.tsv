@@ -3,3 +3,4 @@ ts	phase	decision	why	evidence	result
 2026-09-06T20:06:26Z	frame	kept the supplied candidate-3 architecture	the arena already compared four shapes and picked typed dual worlds with R3F	.design/SYNTHESIS.md	design accepted
 2026-09-06T20:06:26Z	baseline	built the unmodified scaffold before feature work	the baseline separates setup failures from implementation failures	npm run build	baseline passed
 2026-09-06T20:16:22Z	domain	implemented branded measurements, typed catalogs, dual worlds, shoe charts, commands, and safe persistence	the stable document contract lets scenes and UI consume one source of truth	commit bce45c5	npm run verify:domain and npm run build passed
+2026-09-06T20:26:17Z	scenes	built distinct procedural humans and feet with calibrated spaces and separate navigation rigs	the product needs real browser models before UI polish can be judged	commit dd36feb	npm run build passed
