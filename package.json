@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview --host 127.0.0.1 --port 43123",
     "verify:domain": "node --experimental-strip-types scripts/verify-domain.mjs",
+    "verify:rendering": "node scripts/verify-rendering.mjs",
     "verify:ui": "node scripts/verify-ui.mjs"
   },
   "dependencies": {
