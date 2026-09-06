@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { mkdir } from 'node:fs/promises'
+import { mkdir, writeFile } from 'node:fs/promises'
 import { chromium } from 'playwright-core'
 
 const baseUrl = process.env.APP_URL ?? 'http://127.0.0.1:43123'
@@ -7,6 +7,37 @@ const artifactDir = process.env.ARTIFACT_DIR ?? '/tmp/3d-compare-verification'
 const executablePath = process.env.CHROME_BIN ?? '/usr/local/bin/google-chrome'
 
 await mkdir(artifactDir, { recursive: true })
+
+async function captureWebGlFrame(page, filename) {
+  const frame = await page.evaluate(
+    () =>
+      new Promise((resolve) => {
+        requestAnimationFrame(() => {
+          const canvas = document.querySelector('#compare-stage canvas')
+          const gl = canvas.getContext('webgl2') ?? canvas.getContext('webgl')
+          const pixels = new Uint8Array(canvas.width * canvas.height * 4)
+          gl.readPixels(0, 0, canvas.width, canvas.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels)
+          let minimum = 765
+          let maximum = 0
+          let samples = 0
+          for (let index = 0; index < pixels.length; index += 64) {
+            const sum = pixels[index] + pixels[index + 1] + pixels[index + 2]
+            minimum = Math.min(minimum, sum)
+            maximum = Math.max(maximum, sum)
+            samples += 1
+          }
+          resolve({
+            dataUrl: canvas.toDataURL('image/png'),
+            contrast: maximum - minimum,
+            samples,
+          })
+        })
+      }),
+  )
+  assert.ok(frame.samples > 1000)
+  assert.ok(frame.contrast > 100, `WebGL frame contrast was only ${frame.contrast}.`)
+  await writeFile(`${artifactDir}/${filename}`, Buffer.from(frame.dataUrl.split(',')[1], 'base64'))
+}
 
 const browser = await chromium.launch({
   executablePath,
@@ -63,6 +94,7 @@ try {
     fullPage: true,
   })
   assert.ok(heightScreenshot.byteLength > 30_000)
+  await captureWebGlFrame(page, 'height-webgl.png')
 
   await page.locator('.mode-switch button').nth(1).evaluate((button) => button.click())
   await page.locator('.mode-feet').waitFor({ state: 'visible' })
@@ -89,6 +121,7 @@ try {
     fullPage: true,
   })
   assert.ok(feetScreenshot.byteLength > 30_000)
+  await captureWebGlFrame(page, 'feet-webgl.png')
 
   await page.setViewportSize({ width: 390, height: 844 })
   await page.reload({ waitUntil: 'networkidle' })
