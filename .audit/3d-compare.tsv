@@ -6,3 +6,4 @@ ts	phase	decision	why	evidence	result
 2026-09-06T20:26:17Z	scenes	built distinct procedural humans and feet with calibrated spaces and separate navigation rigs	the product needs real browser models before UI polish can be judged	commit dd36feb	npm run build passed
 2026-09-06T20:27:44Z	ui	connected the responsive workspace, controls, empty states, cap state, and both 3D modes	the compare loop now runs through the real chrome	commit aa55283	NOT VERIFIED: strict build found nullable height form capture
 2026-09-06T20:29:45Z	browser-check	corrected the canvas selector in the browser check	R3F applies Canvas DOM props to its wrapper instead of the nested canvas	scripts/verify-ui.mjs	NOT VERIFIED: first check stopped at the wrong selector
+2026-09-06T20:31:11Z	browser-check	discarded a run interrupted by Vite reload	the development server reloaded the page while documentation changed	Vite server log	INCONCLUSIVE
