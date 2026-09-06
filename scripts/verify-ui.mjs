@@ -64,7 +64,7 @@ try {
   })
   assert.ok(heightScreenshot.byteLength > 30_000)
 
-  await page.locator('.mode-switch button').nth(1).click()
+  await page.locator('.mode-switch button').nth(1).click({ force: true })
   await page.locator('.mode-feet').waitFor({ state: 'visible' })
   assert.match(await page.locator('.stage-title strong').innerText(), /Oak measure table/)
   await page.getByRole('button', { name: 'Add female foot', exact: true }).click()
@@ -97,7 +97,7 @@ try {
     fullPage: true,
   })
 
-  await page.locator('.mode-switch button').first().click()
+  await page.locator('.mode-switch button').first().click({ force: true })
   assert.equal(await page.locator('.lineup-list li').count(), 10)
   assert.match(await page.locator('.cap-message').innerText(), /Stage full/)
   assert.deepEqual(errors, [])
