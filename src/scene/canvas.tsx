@@ -18,7 +18,7 @@ export function CompareCanvas({
   return (
     <Canvas
       id="compare-stage"
-      shadows="soft"
+      shadows
       dpr={[1, 1.75]}
       camera={{ position: [4, 2.4, 6], fov: 38, near: 0.01, far: 60 }}
       gl={{ antialias: true, powerPreference: 'high-performance' }}

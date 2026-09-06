@@ -42,7 +42,7 @@ try {
   assert.equal(await page.locator('.inspector-heading h2').innerText(), 'Ari')
 
   await page.getByRole('button', { name: 'cm', exact: true }).click()
-  await page.getByLabel('Height', { exact: true }).fill('190')
+  await page.locator('.inspector-panel input[type="number"]').fill('190')
   await page.getByRole('button', { name: 'Update height', exact: true }).click()
   assert.equal(await page.locator('.selection-summary strong').innerText(), '190 cm')
 
@@ -71,7 +71,7 @@ try {
   assert.equal(await page.locator('.lineup-list li').count(), 1)
 
   await page.getByRole('button', { name: 'EU', exact: true }).click()
-  await page.getByLabel('EU adult size', { exact: true }).selectOption('40')
+  await page.locator('.shoe-field select').selectOption('40')
   assert.equal(await page.locator('.selection-summary strong').innerText(), 'EU 40')
   assert.match(await page.locator('.selection-summary small').innerText(), /257 mm/)
 
