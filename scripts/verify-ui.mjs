@@ -36,6 +36,7 @@ try {
   await page.locator('.scene-empty').waitFor({ state: 'visible', timeout: 20_000 })
   assert.equal(await page.locator('#compare-stage canvas').count(), 1)
   assert.match(await page.locator('.stage-title strong').innerText(), /Concrete studio/)
+  assert.equal(await page.locator('.nav-toggle button').first().getAttribute('aria-pressed'), 'true')
 
   await page.getByRole('button', { name: 'Add Ari', exact: true }).click()
   await page.locator('.inspector-heading h2').waitFor({ state: 'visible' })
@@ -56,7 +57,6 @@ try {
 
   await page.getByRole('button', { name: 'Walk', exact: true }).click()
   assert.match(await page.locator('.navigation-hint').innerText(), /W A S D/)
-  await page.getByRole('button', { name: 'Orbit', exact: true }).click()
 
   const heightScreenshot = await page.screenshot({
     path: `${artifactDir}/height-desktop.png`,
