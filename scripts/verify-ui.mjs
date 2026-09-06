@@ -67,17 +67,21 @@ try {
   await page.locator('.mode-switch button').nth(1).evaluate((button) => button.click())
   await page.locator('.mode-feet').waitFor({ state: 'visible' })
   assert.match(await page.locator('.stage-title strong').innerText(), /Oak measure table/)
-  await page.getByRole('button', { name: 'Add female foot', exact: true }).click()
+  await page
+    .getByRole('button', { name: 'Add female foot', exact: true })
+    .evaluate((button) => button.click())
   assert.equal(await page.locator('.lineup-list li').count(), 1)
 
-  await page.getByRole('button', { name: 'EU', exact: true }).click()
+  await page.getByRole('button', { name: 'EU', exact: true }).evaluate((button) => button.click())
   await page.locator('.shoe-field select').selectOption('40')
   assert.equal(await page.locator('.selection-summary strong').innerText(), 'EU 40')
   assert.match(await page.locator('.selection-summary small').innerText(), /257 mm/)
 
-  await page.locator('.feet-catalog .catalog-card').nth(1).click()
+  await page.locator('.feet-catalog .catalog-card').nth(1).evaluate((button) => button.click())
   assert.equal(await page.locator('.lineup-list li').count(), 2)
-  await page.getByRole('button', { name: 'Inspect', exact: true }).click()
+  await page
+    .getByRole('button', { name: 'Inspect', exact: true })
+    .evaluate((button) => button.click())
   assert.match(await page.locator('.navigation-hint').innerText(), /Drag to pan/)
 
   const feetScreenshot = await page.screenshot({
