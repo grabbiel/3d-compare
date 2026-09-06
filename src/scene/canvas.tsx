@@ -1,10 +1,21 @@
-import { AdaptiveDpr } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
-import { Suspense } from 'react'
+import { Canvas, useThree } from '@react-three/fiber'
+import { Suspense, useEffect } from 'react'
+import {
+  ACESFilmicToneMapping,
+  SRGBColorSpace,
+} from 'three'
 import type { CompareApp } from '../app/compare-app.ts'
 import type { CompareDocument } from '../domain/document.ts'
 import { FeetWorldView } from './feet/world-view.tsx'
 import { HeightWorldView } from './height/world-view.tsx'
+
+function ClearColor({ mode }: { mode: CompareDocument['mode'] }) {
+  const gl = useThree((state) => state.gl)
+  useEffect(() => {
+    gl.setClearColor(mode === 'height' ? '#b8b9b5' : '#3a322a', 1)
+  }, [gl, mode])
+  return null
+}
 
 export function CompareCanvas({
   app,
@@ -18,13 +29,28 @@ export function CompareCanvas({
   return (
     <Canvas
       id="compare-stage"
-      shadows
-      dpr={[1, 1.75]}
+      dpr={[1, 1.5]}
       camera={{ position: [4, 2.4, 6], fov: 38, near: 0.01, far: 60 }}
-      gl={{ antialias: true, powerPreference: 'high-performance' }}
+      gl={{
+        antialias: true,
+        alpha: false,
+        powerPreference: 'default',
+        preserveDrawingBuffer: true,
+        failIfMajorPerformanceCaveat: false,
+      }}
       onPointerMissed={() => app.select(null)}
-      onCreated={onReady}
+      onCreated={({ gl }) => {
+        gl.outputColorSpace = SRGBColorSpace
+        gl.toneMapping = ACESFilmicToneMapping
+        gl.toneMappingExposure = 1.15
+        gl.setClearColor('#b8b9b5', 1)
+        // Nudge software compositors that otherwise leave the canvas black.
+        gl.domElement.style.transform = 'translateZ(0)'
+        gl.domElement.style.outline = '1px solid transparent'
+        onReady()
+      }}
     >
+      <ClearColor mode={document.mode} />
       <Suspense fallback={null}>
         {document.mode === 'height' ? (
           <HeightWorldView app={app} document={document} />
@@ -32,7 +58,6 @@ export function CompareCanvas({
           <FeetWorldView app={app} document={document} />
         )}
       </Suspense>
-      <AdaptiveDpr pixelated />
     </Canvas>
   )
 }

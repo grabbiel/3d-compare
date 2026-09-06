@@ -1,4 +1,4 @@
-import { ContactShadows, Grid, Html } from '@react-three/drei'
+import { Grid, Html } from '@react-three/drei'
 import type { ReactNode } from 'react'
 
 const rulerMarks = Array.from({ length: 23 }, (_, index) => index / 10)
@@ -8,25 +8,19 @@ export function HeightStudio({ children }: { children: ReactNode }) {
   return (
     <>
       <color attach="background" args={['#b8b9b5']} />
-      <fog attach="fog" args={['#b8b9b5', 8, 22]} />
-      <ambientLight intensity={0.78} color="#dce4e3" />
-      <hemisphereLight args={['#eef4f2', '#625d55', 1.25]} />
-      <directionalLight
-        position={[4, 7, 5]}
-        intensity={2.1}
-        color="#fff4df"
-        castShadow
-        shadow-mapSize={[2048, 2048]}
-        shadow-camera-left={-6}
-        shadow-camera-right={6}
-        shadow-camera-top={5}
-        shadow-camera-bottom={-2}
-      />
-      <spotLight position={[-4, 4.5, 3]} angle={0.48} penumbra={0.8} intensity={42} color="#b9d5da" />
+      <fog attach="fog" args={['#b8b9b5', 10, 26]} />
+      <ambientLight intensity={1.25} color="#e8eeec" />
+      <hemisphereLight args={['#f2f6f4', '#7a756c', 1.45]} />
+      <directionalLight position={[4, 7, 5]} intensity={1.65} color="#fff6e6" />
+      <directionalLight position={[-3, 3, -2]} intensity={0.55} color="#c5d5da" />
 
-      <mesh position={[0, -0.045, 0]} receiveShadow>
+      <mesh position={[0, -0.045, 0]}>
         <boxGeometry args={[13, 0.09, 7]} />
         <meshStandardMaterial color="#9d9e99" roughness={0.92} />
+      </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]}>
+        <circleGeometry args={[0.55, 48]} />
+        <meshBasicMaterial color="#2f322e" transparent opacity={0.16} />
       </mesh>
       <Grid
         position={[0, 0.004, 0]}
@@ -41,11 +35,11 @@ export function HeightStudio({ children }: { children: ReactNode }) {
         fadeStrength={1.4}
         infiniteGrid={false}
       />
-      <mesh position={[0, 2.1, -2.72]} receiveShadow>
+      <mesh position={[0, 2.1, -2.72]}>
         <boxGeometry args={[13, 4.2, 0.12]} />
         <meshStandardMaterial color="#c7c7c1" roughness={0.96} />
       </mesh>
-      <mesh position={[-6.1, 2.1, 0]} receiveShadow>
+      <mesh position={[-6.1, 2.1, 0]}>
         <boxGeometry args={[0.12, 4.2, 5.5]} />
         <meshStandardMaterial color="#afb0ab" roughness={0.94} />
       </mesh>
@@ -81,15 +75,6 @@ export function HeightStudio({ children }: { children: ReactNode }) {
       </group>
 
       {children}
-      <ContactShadows
-        position={[0, 0.006, 0]}
-        scale={12}
-        opacity={0.36}
-        blur={2.4}
-        far={4}
-        resolution={512}
-        color="#42433f"
-      />
     </>
   )
 }

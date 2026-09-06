@@ -1,4 +1,4 @@
-import { ContactShadows, Grid, Html } from '@react-three/drei'
+import { Grid, Html } from '@react-three/drei'
 import type { ReactNode } from 'react'
 
 const rulerLabels = Array.from({ length: 11 }, (_, index) => (index - 5) * 10)
@@ -7,30 +7,24 @@ const grainLines = Array.from({ length: 9 }, (_, index) => -0.48 + index * 0.12)
 export function FeetTable({ children }: { children: ReactNode }) {
   return (
     <>
-      <color attach="background" args={['#29251f']} />
-      <fog attach="fog" args={['#29251f', 3.2, 8]} />
-      <ambientLight intensity={0.72} color="#f6dec0" />
-      <hemisphereLight args={['#f9e4c7', '#2b2721', 1.1]} />
-      <directionalLight
-        position={[-2.5, 4, 3]}
-        intensity={2.8}
-        color="#ffd9a8"
-        castShadow
-        shadow-mapSize={[2048, 2048]}
-        shadow-camera-left={-2}
-        shadow-camera-right={2}
-        shadow-camera-top={2}
-        shadow-camera-bottom={-2}
-      />
-      <spotLight position={[2, 2.8, 1]} angle={0.58} penumbra={0.9} intensity={38} color="#d8e3d7" />
+      <color attach="background" args={['#3a322a']} />
+      <fog attach="fog" args={['#3a322a', 4, 10]} />
+      <ambientLight intensity={1.15} color="#f8e2c4" />
+      <hemisphereLight args={['#ffe8c8', '#4a3f34', 1.25]} />
+      <directionalLight position={[-2.5, 4, 3]} intensity={1.9} color="#ffd9a8" />
+      <directionalLight position={[2, 2.5, -1]} intensity={0.45} color="#d8e3d7" />
 
-      <mesh position={[0, -0.075, 0]} receiveShadow>
+      <mesh position={[0, -0.075, 0]}>
         <boxGeometry args={[2.2, 0.15, 1.2]} />
-        <meshStandardMaterial color="#805739" roughness={0.68} />
+        <meshStandardMaterial color="#8a6140" roughness={0.68} />
       </mesh>
       <mesh position={[0, -0.155, 0]}>
         <boxGeometry args={[2.26, 0.035, 1.26]} />
         <meshStandardMaterial color="#3b2a20" roughness={0.78} />
+      </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.003, 0]}>
+        <circleGeometry args={[0.28, 48]} />
+        <meshBasicMaterial color="#1a120c" transparent opacity={0.28} />
       </mesh>
 
       {grainLines.map((z, index) => (
@@ -83,15 +77,6 @@ export function FeetTable({ children }: { children: ReactNode }) {
       ))}
 
       {children}
-      <ContactShadows
-        position={[0, 0.008, 0]}
-        scale={2.4}
-        opacity={0.5}
-        blur={2}
-        far={1.4}
-        resolution={512}
-        color="#26190f"
-      />
     </>
   )
 }

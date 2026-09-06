@@ -21,8 +21,6 @@ function mesh(
   node.position.set(...position)
   node.scale.set(...scale)
   node.rotation.set(...rotation)
-  node.castShadow = true
-  node.receiveShadow = true
   return node
 }
 

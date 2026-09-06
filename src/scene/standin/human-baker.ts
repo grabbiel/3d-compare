@@ -22,8 +22,6 @@ function mesh(
   node.position.set(...position)
   node.scale.set(...scale)
   node.rotation.set(...rotation)
-  node.castShadow = true
-  node.receiveShadow = true
   return node
 }
 
@@ -205,13 +203,16 @@ function buildHuman(recipe: BodyRecipe): THREE.Group {
     )
   }
 
-  const neckY = 0.825
   const headHeight = recipe.headRatio
-  const headY = 1 - headHeight / 2 - 0.006
+  const headY = 1 - headHeight / 2 - 0.004
+  const neckBottom = shoulderY + 0.01
+  const neckTop = headY - headHeight * 0.28
+  const neckHeight = Math.max(0.04, neckTop - neckBottom)
+  const neckY = neckBottom + neckHeight / 2
   const headWidth = headHeight * (recipe.sex === 'female' ? 0.54 : 0.57)
   group.add(
     mesh(
-      new THREE.CylinderGeometry(0.034 * buildFactor, 0.039 * buildFactor, 0.07, 14),
+      new THREE.CylinderGeometry(0.032 * buildFactor, 0.038 * buildFactor, neckHeight, 14),
       skin,
       [0, neckY, 0],
     ),

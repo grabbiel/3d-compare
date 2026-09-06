@@ -46,3 +46,7 @@ The final domain, lint, production build, browser workflow, and live WebGL frame
 - Shoe charts cover adult US 4 to 16 for men, US 4 to 14 for women, and EU 34 to 50.
 - Persistence is local to one browser. There is no account, cloud sync, or shareable URL.
 - The production JavaScript bundle includes Three.js and is about 1.16 MB before gzip. Vite reports its default 500 kB chunk warning.
+
+## Follow-up: stage visibility (2026-09-06)
+
+Removed shadow-map dependency (PCFSoft deprecation + soft-GL black composite). Height/feet studios now use brighter lights without castShadow/ContactShadows. WebGL drawing-buffer captures remain the source of truth in this VM; Playwright full-page screenshots still under-report WebGL pixels.
