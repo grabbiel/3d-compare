@@ -37,6 +37,8 @@ npm run verify:ui
 
 The development server binds to `127.0.0.1:43123`.
 
+The final domain, lint, production build, browser workflow, and live WebGL frame checks pass. The HTTP check returns 200. The development server remains running.
+
 ## Known gaps
 
 - The app uses procedural stand-ins. It does not include commissioned GLB models, animation, or clothing controls.
