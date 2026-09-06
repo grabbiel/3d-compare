@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview --host 127.0.0.1 --port 43123",
-    "verify:domain": "node --experimental-strip-types scripts/verify-domain.mjs"
+    "verify:domain": "node --experimental-strip-types scripts/verify-domain.mjs",
+    "verify:ui": "node scripts/verify-ui.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",
@@ -25,6 +26,7 @@
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.1.0",
     "oxlint": "^1.79.0",
+    "playwright-core": "^1.63.0",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "vite": "^8.2.2"
