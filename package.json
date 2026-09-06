@@ -1,5 +1,5 @@
 {
-  "name": "3d-compare-scaffold",
+  "name": "3d-compare",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +7,8 @@
     "dev": "vite --host 127.0.0.1 --port 43123",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview --host 127.0.0.1 --port 43123"
+    "preview": "vite preview --host 127.0.0.1 --port 43123",
+    "verify:domain": "node --experimental-strip-types scripts/verify-domain.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",
