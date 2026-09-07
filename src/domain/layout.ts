@@ -18,8 +18,13 @@ export type PlanarDelta = {
   yaw?: number
 }
 
-export const HUMAN_SPACING_M = 0.82
-export const FOOT_SPACING_M = 0.22
+/** The human models stand in an A-pose about 1.2 m across, so a lineup needs this much room. */
+export const HUMAN_SPACING_M = 1.2
+/** A pair of feet with a narrowed stance is about 0.3 m across before scaling. */
+export const FOOT_SPACING_M = 0.42
+export const FOOT_COLUMNS = 5
+/** Rows of feet stand with their heels on lines this far in front of and behind the table center. */
+export const FOOT_ROW_OFFSET_M = 0.2
 
 function centeredSlot(index: number): number {
   if (index === 0) {
@@ -30,22 +35,23 @@ function centeredSlot(index: number): number {
   return index % 2 === 1 ? -distance : distance
 }
 
+/** Everyone stands on one line so the eye compares heights without perspective bias. */
 export function nextHumanPose(count: number): FloorPose {
   return {
     space: 'floor',
     x: centeredSlot(count) * HUMAN_SPACING_M,
-    z: Math.abs(centeredSlot(count)) > 3 ? 0.55 : 0,
+    z: 0,
     yaw: 0,
   }
 }
 
 export function nextFootPose(count: number): SurfacePose {
-  const column = count % 5
-  const row = Math.floor(count / 5)
+  const column = count % FOOT_COLUMNS
+  const row = Math.floor(count / FOOT_COLUMNS)
   return {
     space: 'table',
     x: centeredSlot(column) * FOOT_SPACING_M,
-    z: row === 0 ? -0.14 : 0.14,
+    z: row === 0 ? -FOOT_ROW_OFFSET_M : FOOT_ROW_OFFSET_M,
     yaw: 0,
   }
 }

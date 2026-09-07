@@ -1,45 +1,34 @@
 import type { FootLengthMm, HeightMm } from './measure.ts'
 
 export type Sex = 'female' | 'male'
-export type BodyBuild = 'slim' | 'athletic' | 'heavy'
-export type HairStyle = 'bob' | 'crop' | 'bun' | 'fade' | 'wave' | 'close'
+export type SkinTone = 'pale' | 'tan' | 'dark'
 
 export const HUMAN_CATALOG_IDS = [
-  'female-slim',
-  'female-athletic',
-  'female-heavy',
-  'male-slim',
-  'male-athletic',
-  'male-heavy',
+  'female-tan-dress',
+  'female-dark-jeans-tshirt',
+  'female-pale-shorts-croptop',
+  'male-tan-shorts-tshirt',
+  'male-dark-jeans-sleeveless',
+  'male-pale-trousers-shirt',
 ] as const
 export type HumanCatalogId = (typeof HUMAN_CATALOG_IDS)[number]
 
 export const FOOT_CATALOG_IDS = ['foot-female', 'foot-male'] as const
 export type FootCatalogId = (typeof FOOT_CATALOG_IDS)[number]
 
-export type BodyRecipe = {
-  sex: Sex
-  build: BodyBuild
-  shoulderWidth: number
-  hipWidth: number
-  torsoDepth: number
-  inseamRatio: number
-  headRatio: number
-  stance: number
-  hair: HairStyle
-  skinHex: string
-  clothingHex: string
-  accentHex: string
-  hairHex: string
+/**
+ * A glTF binary shipped in public/models. Every asset is a static mesh in
+ * meters, Y up, facing +Z, with its soles resting on y = 0.
+ */
+export type ModelAsset = {
+  file: string
+  triangles: number
 }
 
-export type FootRecipe = {
-  sex: Sex
-  lastWidth: 'narrow' | 'wide'
-  ankleWidth: number
-  archHeight: number
+/** Flat colors that stand in for the textured model in 2D chrome such as cards and lineup rows. */
+export type Swatch = {
   skinHex: string
-  accentHex: string
+  outfitHex: string
 }
 
 export type FigureAlignment = {
@@ -53,7 +42,10 @@ export type HumanCatalogEntry = {
   label: string
   subtitle: string
   sex: Sex
-  recipe: BodyRecipe
+  skin: SkinTone
+  model: ModelAsset
+  swatch: Swatch
+  /** Stature of the authored mesh from sole to skull top, hair excluded. */
   referenceHeightMm: HeightMm
   alignment: FigureAlignment
 }
@@ -63,7 +55,12 @@ export type FootCatalogEntry = {
   label: string
   subtitle: string
   sex: Sex
-  recipe: FootRecipe
+  skin: SkinTone
+  model: ModelAsset
+  swatch: Swatch
+  /** Heel-to-toe length of each authored foot. */
   referenceFootLengthMm: FootLengthMm
+  /** Foot length a new placement starts at: a common adult size for the sex. */
+  defaultFootLengthMm: FootLengthMm
   alignment: FigureAlignment
 }

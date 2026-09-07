@@ -1,9 +1,6 @@
 import { Canvas, useThree } from '@react-three/fiber'
 import { Suspense, useEffect } from 'react'
-import {
-  ACESFilmicToneMapping,
-  SRGBColorSpace,
-} from 'three'
+import { NeutralToneMapping, SRGBColorSpace } from 'three'
 import type { CompareApp } from '../app/compare-app.ts'
 import type { CompareDocument } from '../domain/document.ts'
 import { FeetWorldView } from './feet/world-view.tsx'
@@ -41,8 +38,9 @@ export function CompareCanvas({
       onPointerMissed={() => app.select(null)}
       onCreated={({ gl }) => {
         gl.outputColorSpace = SRGBColorSpace
-        gl.toneMapping = ACESFilmicToneMapping
-        gl.toneMappingExposure = 1.15
+        // Neutral tone mapping keeps textured skin and fabric close to their authored colors.
+        gl.toneMapping = NeutralToneMapping
+        gl.toneMappingExposure = 1
         gl.setClearColor('#b8b9b5', 1)
         // Nudge software compositors that otherwise leave the canvas black.
         gl.domElement.style.transform = 'translateZ(0)'

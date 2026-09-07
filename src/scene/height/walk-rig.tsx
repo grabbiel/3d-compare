@@ -128,7 +128,7 @@ export function HeightWalkRig({
     const speed = keys.current.has('ShiftLeft') ? 3.25 : 1.75
     camera.position.addScaledVector(forward, forwardInput * speed * delta)
     camera.position.addScaledVector(right, strafeInput * speed * delta)
-    camera.position.x = THREE.MathUtils.clamp(camera.position.x, -5.8, 5.8)
+    camera.position.x = THREE.MathUtils.clamp(camera.position.x, -7.2, 7.2)
     camera.position.y = DEFAULT_WALK_EYE_M
     camera.position.z = THREE.MathUtils.clamp(camera.position.z, -2.35, 3.35)
   })

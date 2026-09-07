@@ -1,11 +1,6 @@
 import { footEntry } from '../catalog/feet.ts'
 import { humanEntry } from '../catalog/humans.ts'
-import type {
-  BodyRecipe,
-  FootCatalogId,
-  FootRecipe,
-  HumanCatalogId,
-} from '../domain/catalog.ts'
+import type { FootCatalogId, HumanCatalogId, ModelAsset } from '../domain/catalog.ts'
 import type { PlacedFoot } from '../domain/feet-world.ts'
 import type { PlacedHuman } from '../domain/height-world.ts'
 import type { PlacementId } from '../domain/ids.ts'
@@ -20,7 +15,7 @@ import { formatShoe, type ShoeSystem } from '../domain/shoe-charts.ts'
 export type HumanDraw = {
   id: PlacementId
   catalogId: HumanCatalogId
-  recipe: BodyRecipe
+  model: ModelAsset
   referenceHeightM: number
   scale: number
   position: readonly [number, 0, number]
@@ -32,7 +27,7 @@ export type HumanDraw = {
 export type FootDraw = {
   id: PlacementId
   catalogId: FootCatalogId
-  recipe: FootRecipe
+  model: ModelAsset
   referenceLengthM: number
   scale: number
   position: readonly [number, 0, number]
@@ -50,7 +45,7 @@ export function toHumanDraw(
   return {
     id: placement.id,
     catalogId: entry.id,
-    recipe: entry.recipe,
+    model: entry.model,
     referenceHeightM: entry.referenceHeightMm / 1000,
     scale: heightScale(entry.referenceHeightMm, placement.heightMm),
     position: [placement.pose.x, 0, placement.pose.z],
@@ -69,7 +64,7 @@ export function toFootDraw(
   return {
     id: placement.id,
     catalogId: entry.id,
-    recipe: entry.recipe,
+    model: entry.model,
     referenceLengthM: entry.referenceFootLengthMm / 1000,
     scale: footScale(entry.referenceFootLengthMm, placement.footLengthMm),
     position: [placement.pose.x, 0, placement.pose.z],

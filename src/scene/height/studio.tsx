@@ -1,6 +1,9 @@
 import { Grid, Html } from '@react-three/drei'
 import type { ReactNode } from 'react'
+import { StudioEnvironment } from '../environment.tsx'
 
+const FLOOR_WIDTH_M = 16
+const FLOOR_DEPTH_M = 7
 const rulerMarks = Array.from({ length: 23 }, (_, index) => index / 10)
 const rulerLabels = [0, 50, 100, 150, 200]
 
@@ -8,43 +11,39 @@ export function HeightStudio({ children }: { children: ReactNode }) {
   return (
     <>
       <color attach="background" args={['#b8b9b5']} />
-      <fog attach="fog" args={['#b8b9b5', 10, 26]} />
-      <ambientLight intensity={1.25} color="#e8eeec" />
-      <hemisphereLight args={['#f2f6f4', '#7a756c', 1.45]} />
-      <directionalLight position={[4, 7, 5]} intensity={1.65} color="#fff6e6" />
-      <directionalLight position={[-3, 3, -2]} intensity={0.55} color="#c5d5da" />
+      <fog attach="fog" args={['#b8b9b5', 16, 40]} />
+      <StudioEnvironment intensity={0.85} />
+      <hemisphereLight args={['#f4f6f2', '#7a756c', 0.5]} />
+      <directionalLight position={[4, 7, 5]} intensity={2.2} color="#fff4e4" />
+      <directionalLight position={[-4, 3.5, -2]} intensity={0.7} color="#c9d7dc" />
 
       <mesh position={[0, -0.045, 0]}>
-        <boxGeometry args={[13, 0.09, 7]} />
+        <boxGeometry args={[FLOOR_WIDTH_M, 0.09, FLOOR_DEPTH_M]} />
         <meshStandardMaterial color="#9d9e99" roughness={0.92} />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]}>
-        <circleGeometry args={[0.55, 48]} />
-        <meshBasicMaterial color="#2f322e" transparent opacity={0.16} />
       </mesh>
       <Grid
         position={[0, 0.004, 0]}
-        args={[12, 6]}
+        args={[FLOOR_WIDTH_M, FLOOR_DEPTH_M]}
         cellSize={0.1}
         cellThickness={0.35}
         cellColor="#858780"
         sectionSize={1}
         sectionThickness={1.15}
         sectionColor="#6f726b"
-        fadeDistance={13}
+        fadeDistance={18}
         fadeStrength={1.4}
         infiniteGrid={false}
       />
       <mesh position={[0, 2.1, -2.72]}>
-        <boxGeometry args={[13, 4.2, 0.12]} />
+        <boxGeometry args={[FLOOR_WIDTH_M, 4.2, 0.12]} />
         <meshStandardMaterial color="#c7c7c1" roughness={0.96} />
       </mesh>
-      <mesh position={[-6.1, 2.1, 0]}>
+      <mesh position={[-FLOOR_WIDTH_M / 2 + 0.4, 2.1, 0]}>
         <boxGeometry args={[0.12, 4.2, 5.5]} />
         <meshStandardMaterial color="#afb0ab" roughness={0.94} />
       </mesh>
 
-      <group position={[-5.35, 0, -2.62]}>
+      <group position={[-FLOOR_WIDTH_M / 2 + 1.15, 0, -2.62]}>
         <mesh position={[0, 1.1, 0.012]}>
           <boxGeometry args={[0.018, 2.2, 0.012]} />
           <meshBasicMaterial color="#444b48" />

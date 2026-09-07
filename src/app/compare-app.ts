@@ -173,7 +173,7 @@ export function createCompareApp(options: CompareAppOptions = {}): CompareApp {
         state.feet,
         mintPlacementId(),
         catalogId,
-        entry.referenceFootLengthMm,
+        entry.defaultFootLengthMm,
       )
       if (change.world !== state.feet) {
         publish({ ...state, feet: change.world })

@@ -16,6 +16,8 @@
     "preview": "vite preview --host 127.0.0.1 --port 43123",
     "preverify:domain": "node scripts/check-node.mjs",
     "verify:domain": "node --experimental-strip-types scripts/verify-domain.mjs",
+    "preverify:models": "node scripts/check-node.mjs",
+    "verify:models": "node --experimental-strip-types scripts/verify-models.mjs",
     "verify:rendering": "node scripts/verify-rendering.mjs",
     "verify:ui": "node scripts/verify-ui.mjs"
   },
