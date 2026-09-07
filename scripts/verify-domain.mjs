@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { createCompareApp } from '../src/app/compare-app.ts'
 import { HUMAN_CATALOG } from '../src/catalog/humans.ts'
 import { FEET_CATALOG } from '../src/catalog/feet.ts'
+import { mintPlacementId } from '../src/domain/ids.ts'
 import { parseDocumentJson, serializeDocument } from '../src/domain/persist.ts'
 import {
   footLengthMm,
@@ -28,6 +29,22 @@ const womensEight = parseShoeSpec({ system: 'US', size: 8 }, 'female')
 const mensEight = parseShoeSpec({ system: 'US', size: 8 }, 'male')
 assert.equal(womensEight.ok && womensEight.value, footLengthMm(242))
 assert.equal(mensEight.ok && mensEight.value, footLengthMm(255))
+
+const uuidPattern = /^placement-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+assert.match(mintPlacementId(), uuidPattern)
+// Browsers hide crypto.randomUUID outside secure contexts. Simulate that and
+// check the getRandomValues fallback still mints unique, well-formed ids.
+Object.defineProperty(globalThis.crypto, 'randomUUID', { value: undefined, configurable: true })
+try {
+  const fallbackIds = new Set(Array.from({ length: 50 }, () => mintPlacementId()))
+  assert.equal(fallbackIds.size, 50)
+  for (const id of fallbackIds) {
+    assert.match(id, uuidPattern)
+  }
+} finally {
+  delete globalThis.crypto.randomUUID
+}
+assert.equal(typeof globalThis.crypto.randomUUID, 'function')
 
 const app = createCompareApp()
 for (let index = 0; index < 10; index += 1) {

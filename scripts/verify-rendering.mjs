@@ -1,24 +1,13 @@
 import assert from 'node:assert/strict'
 import { mkdir, writeFile } from 'node:fs/promises'
-import { chromium } from 'playwright-core'
+import { launchChrome } from './browser.mjs'
 
 const baseUrl = process.env.APP_URL ?? 'http://127.0.0.1:43123'
 const artifactDir = process.env.ARTIFACT_DIR ?? '/tmp/3d-compare-fix'
-const executablePath = process.env.CHROME_BIN ?? '/usr/local/bin/google-chrome'
 
 await mkdir(artifactDir, { recursive: true })
 
-const browser = await chromium.launch({
-  executablePath,
-  headless: true,
-  args: [
-    '--no-sandbox',
-    '--enable-webgl',
-    '--use-gl=angle',
-    '--use-angle=swiftshader',
-    '--disable-dev-shm-usage',
-  ],
-})
+const browser = await launchChrome()
 
 const page = await browser.newPage({ viewport: { width: 1440, height: 960 } })
 

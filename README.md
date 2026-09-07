@@ -2,6 +2,21 @@
 
 3D Compare is a browser tool for seeing size differences at true relative scale. Build a lineup of people by height, or compare adult foot lengths by shoe size.
 
+## Requirements
+
+- Node.js 22.12 or newer. The toolchain (Vite 8 on Rolldown, oxlint, and the built-in TypeScript type stripping the verification scripts use) does not run on Node.js 18 or 20.
+- npm 10 or newer.
+
+`.nvmrc` pins the major version, so `nvm install 22 && nvm use` selects a supported release. `.npmrc` sets `engine-strict=true`, so `npm install` on an unsupported Node.js stops with an "Unsupported engine" error instead of installing packages that fail later. The `dev`, `build`, `preview`, and `verify:domain` scripts run the same check before starting.
+
+If you see this when starting the dev server, your shell is on an old Node.js:
+
+```
+SyntaxError: The requested module 'node:util' does not provide an export named 'styleText'
+```
+
+Switch to Node.js 22, delete `node_modules`, and run `npm install` again.
+
 ## Run the app
 
 ```bash
@@ -37,8 +52,10 @@ npm run lint
 npm run build
 ```
 
-With the development server and system Chrome running, exercise the complete compare flow:
+With the development server running, exercise the complete compare flow in a headless browser:
 
 ```bash
 npm run verify:ui
 ```
+
+The script launches the system Google Chrome through Playwright on macOS, Windows, and Linux. Point `CHROME_BIN` at a Chrome or Chromium binary to use a different browser build. Screenshots land in `/tmp/3d-compare-verification`.

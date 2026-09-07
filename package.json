@@ -3,11 +3,18 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
+    "predev": "node scripts/check-node.mjs",
     "dev": "vite --host 127.0.0.1 --port 43123",
+    "prebuild": "node scripts/check-node.mjs",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
+    "prepreview": "node scripts/check-node.mjs",
     "preview": "vite preview --host 127.0.0.1 --port 43123",
+    "preverify:domain": "node scripts/check-node.mjs",
     "verify:domain": "node --experimental-strip-types scripts/verify-domain.mjs",
     "verify:rendering": "node scripts/verify-rendering.mjs",
     "verify:ui": "node scripts/verify-ui.mjs"
