@@ -7,7 +7,16 @@ function material(
   color: THREE.ColorRepresentation,
   roughness: number,
 ): THREE.MeshStandardMaterial {
-  return new THREE.MeshStandardMaterial({ color, roughness, metalness: 0.01 })
+  const baseColor = new THREE.Color(color)
+  return new THREE.MeshStandardMaterial({
+    color: baseColor,
+    // Preserve skin, nail, and accent colors if the lighting contribution is
+    // missing or unusually dark on a software/low-power WebGL renderer.
+    emissive: baseColor,
+    emissiveIntensity: 0.24,
+    roughness,
+    metalness: 0.01,
+  })
 }
 
 function mesh(
