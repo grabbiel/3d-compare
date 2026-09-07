@@ -1,10 +1,9 @@
 import assert from 'node:assert/strict'
 import { mkdir, writeFile } from 'node:fs/promises'
-import { chromium } from 'playwright-core'
+import { launchChrome } from './browser.mjs'
 
 const baseUrl = process.env.APP_URL ?? 'http://127.0.0.1:43123'
 const artifactDir = process.env.ARTIFACT_DIR ?? '/tmp/3d-compare-verification'
-const executablePath = process.env.CHROME_BIN ?? '/usr/local/bin/google-chrome'
 
 await mkdir(artifactDir, { recursive: true })
 
@@ -39,22 +38,29 @@ async function captureWebGlFrame(page, filename) {
   await writeFile(`${artifactDir}/${filename}`, Buffer.from(frame.dataUrl.split(',')[1], 'base64'))
 }
 
-const browser = await chromium.launch({
-  executablePath,
-  headless: true,
-  args: [
-    '--no-sandbox',
-    '--enable-webgl',
-    '--use-gl=angle',
-    '--use-angle=swiftshader',
-    '--disable-dev-shm-usage',
-  ],
-})
+const browser = await launchChrome()
 
 const page = await browser.newPage({ viewport: { width: 1440, height: 960 } })
 const errors = []
+
+// The Google Fonts stylesheet is optional: the app falls back to system fonts
+// when it does not load, so an offline or sandboxed run must not fail on it.
+const optionalFontHosts = new Set(['fonts.googleapis.com', 'fonts.gstatic.com'])
+
+function isOptionalFontFailure(message) {
+  const url = message.location().url
+  if (!url) {
+    return false
+  }
+  try {
+    return optionalFontHosts.has(new URL(url).hostname)
+  } catch {
+    return false
+  }
+}
+
 page.on('console', (message) => {
-  if (message.type() === 'error') {
+  if (message.type() === 'error' && !isOptionalFontFailure(message)) {
     errors.push(`console: ${message.text()}`)
   }
 })

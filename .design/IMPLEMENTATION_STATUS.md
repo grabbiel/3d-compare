@@ -50,3 +50,7 @@ The final domain, lint, production build, browser workflow, and live WebGL frame
 ## Follow-up: stage visibility (2026-09-06)
 
 Removed shadow-map dependency (PCFSoft deprecation + soft-GL black composite). Height/feet studios now use brighter lights without castShadow/ContactShadows. WebGL drawing-buffer captures remain the source of truth in this VM; Playwright full-page screenshots still under-report WebGL pixels.
+
+## Follow-up: Node.js floor (2026-09-07)
+
+`npm run dev` on Node.js 18 failed inside Rolldown with `SyntaxError: The requested module 'node:util' does not provide an export named 'styleText'`. Vite 8, Rolldown, oxlint, and drei's camera-controls require Node.js 20.19 or 22.12 and newer, and `verify:domain` needs the TypeScript type stripping that ships in Node.js 22. The repo now declares `engines.node >=22.12.0`, pins `.nvmrc` to 22, sets `engine-strict=true` in `.npmrc`, and runs `scripts/check-node.mjs` before `dev`, `build`, `preview`, and `verify:domain`, so an unsupported Node.js produces a readable message instead of a stack trace. The browser checks find the system Chrome through Playwright's `chrome` channel unless `CHROME_BIN` is set, and `verify:ui` ignores failed loads of the optional Google Fonts stylesheet so offline runs still pass. Placement ids fall back to `crypto.getRandomValues` where `crypto.randomUUID` is unavailable, which covers plain-http origins other than localhost.
