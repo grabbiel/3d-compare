@@ -51,7 +51,7 @@ for (let index = 0; index < 10; index += 1) {
   assert.equal(app.placeHuman(HUMAN_CATALOG[index % HUMAN_CATALOG.length].id).ok, true)
 }
 const beforeCap = app.getState()
-assert.deepEqual(app.placeHuman('female-slim'), { ok: false, reason: 'cap-reached' })
+assert.deepEqual(app.placeHuman(HUMAN_CATALOG[0].id), { ok: false, reason: 'cap-reached' })
 assert.equal(app.getState(), beforeCap)
 
 const firstHuman = app.getState().height.placements[0]
@@ -65,7 +65,7 @@ assert.deepEqual(app.updateHumanHeight(firstHuman.id, { unit: 'cm', value: 20 })
 })
 
 app.setMode('feet')
-const footResult = app.placeFoot('foot-female')
+const footResult = app.placeFoot(FEET_CATALOG[0].id)
 assert.equal(footResult.ok, true)
 if (!footResult.ok) {
   throw new Error('Expected a placed foot.')

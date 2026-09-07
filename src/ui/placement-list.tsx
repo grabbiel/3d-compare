@@ -52,8 +52,8 @@ export function PlacementList({
                         <span
                           className="lineup-avatar"
                           style={{
-                            color: entry.recipe.clothingHex,
-                            backgroundColor: entry.recipe.skinHex,
+                            color: entry.swatch.outfitHex,
+                            backgroundColor: entry.swatch.skinHex,
                           }}
                         >
                           <PersonIcon />
@@ -92,8 +92,8 @@ export function PlacementList({
                         <span
                           className="lineup-avatar"
                           style={{
-                            color: entry.recipe.accentHex,
-                            backgroundColor: entry.recipe.skinHex,
+                            color: entry.swatch.outfitHex,
+                            backgroundColor: entry.swatch.skinHex,
                           }}
                         >
                           <FootIcon />

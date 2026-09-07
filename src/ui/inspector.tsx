@@ -15,7 +15,7 @@ import {
 } from './size-codec.ts'
 
 function EmptyInspector({ mode, hasPlacements }: { mode: 'height' | 'feet'; hasPlacements: boolean }) {
-  const noun = mode === 'height' ? 'person' : 'foot'
+  const noun = mode === 'height' ? 'person' : 'foot model'
   return (
     <section className="panel inspector-panel">
       <div className="panel-heading">
@@ -101,7 +101,7 @@ function HeightInspector({
       <div className="selection-summary">
         <span
           className="selection-avatar"
-          style={{ color: entry.recipe.clothingHex, backgroundColor: entry.recipe.skinHex }}
+          style={{ color: entry.swatch.outfitHex, backgroundColor: entry.swatch.skinHex }}
         >
           <PersonIcon />
         </span>
@@ -213,7 +213,7 @@ function FootInspector({
       <div className="selection-summary">
         <span
           className="selection-avatar"
-          style={{ color: entry.recipe.accentHex, backgroundColor: entry.recipe.skinHex }}
+          style={{ color: entry.swatch.outfitHex, backgroundColor: entry.swatch.skinHex }}
         >
           <FootIcon />
         </span>

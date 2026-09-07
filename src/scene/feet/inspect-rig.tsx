@@ -10,7 +10,7 @@ function defaultView(): FeetInspectSnapshot {
   return {
     kind: 'inspect',
     target: [0, 0.04, 0],
-    position: [0, 1.45, 0.62],
+    position: [0, 1.7, 0.75],
   }
 }
 
@@ -22,8 +22,8 @@ function selectionView(world: FeetWorld): FeetInspectSnapshot {
 
   return {
     kind: 'inspect',
-    target: [selected.pose.x, 0.04, selected.pose.z],
-    position: [selected.pose.x, 0.82, selected.pose.z + 0.34],
+    target: [selected.pose.x, 0.04, selected.pose.z + 0.09],
+    position: [selected.pose.x, 0.95, selected.pose.z + 0.45],
   }
 }
 
@@ -87,7 +87,7 @@ export function FeetInspectRig({ world, rig }: { world: FeetWorld; rig: NavRig }
       enableRotate={false}
       screenSpacePanning={false}
       minDistance={0.2}
-      maxDistance={2.5}
+      maxDistance={3}
       target={[0, 0.04, 0]}
       onEnd={() => rig.commitFeetSnapshot(snapshot())}
     />

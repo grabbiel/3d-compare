@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import type { CompareApp } from '../app/compare-app.ts'
 import { useCompare } from '../app/use-compare.ts'
+import { FEET_CATALOG } from '../catalog/feet.ts'
+import { HUMAN_CATALOG } from '../catalog/humans.ts'
 import { CompareCanvas } from '../scene/canvas.tsx'
 import { CatalogDrawer } from './catalog-drawer.tsx'
 import { FootIcon, PersonIcon, PlusIcon } from './icons.tsx'
@@ -95,7 +97,7 @@ export function App({ app }: { app: CompareApp }) {
                 <h2>
                   {document.mode === 'height'
                     ? 'Build your first lineup'
-                    : 'Set down a foot model'}
+                    : 'Set down a pair of feet'}
                 </h2>
                 <p>
                   {document.mode === 'height'
@@ -106,14 +108,16 @@ export function App({ app }: { app: CompareApp }) {
                   type="button"
                   onClick={() => {
                     if (document.mode === 'height') {
-                      app.placeHuman('female-slim')
+                      app.placeHuman(HUMAN_CATALOG[0].id)
                     } else {
-                      app.placeFoot('foot-female')
+                      app.placeFoot(FEET_CATALOG[0].id)
                     }
                   }}
                 >
                   <PlusIcon />
-                  {document.mode === 'height' ? 'Add Ari' : 'Add female foot'}
+                  {document.mode === 'height'
+                    ? `Add ${HUMAN_CATALOG[0].label}`
+                    : `Add ${FEET_CATALOG[0].label.toLowerCase()}`}
                 </button>
               </div>
             )}

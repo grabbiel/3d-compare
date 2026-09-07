@@ -4,6 +4,7 @@ import { HUMAN_CATALOG } from '../catalog/humans.ts'
 import type { CompareDocument } from '../domain/document.ts'
 import { FEET_CAP } from '../domain/feet-world.ts'
 import { HEIGHT_CAP } from '../domain/height-world.ts'
+import { preloadModel } from '../scene/models.ts'
 import { FootIcon, PersonIcon, PlusIcon } from './icons.tsx'
 
 export function CatalogDrawer({
@@ -37,6 +38,8 @@ export function CatalogDrawer({
               type="button"
               className="catalog-card"
               disabled={full}
+              onPointerEnter={() => preloadModel(entry.model)}
+              onFocus={() => preloadModel(entry.model)}
               onClick={() => {
                 const result = app.placeHuman(entry.id)
                 if (!result.ok) {
@@ -47,8 +50,8 @@ export function CatalogDrawer({
               <span
                 className="catalog-portrait"
                 style={{
-                  color: entry.recipe.clothingHex,
-                  backgroundColor: entry.recipe.skinHex,
+                  color: entry.swatch.outfitHex,
+                  backgroundColor: entry.swatch.skinHex,
                 }}
               >
                 <PersonIcon />
@@ -85,7 +88,7 @@ export function CatalogDrawer({
           {count}/{FEET_CAP}
         </span>
       </div>
-      <p className="panel-intro">Add a foot and partial lower leg to the measuring table.</p>
+      <p className="panel-intro">Add a pair of feet, cut at mid-shin, to the measuring table.</p>
       <div className="catalog-grid feet-catalog">
         {FEET_CATALOG.map((entry) => (
           <button
@@ -93,6 +96,8 @@ export function CatalogDrawer({
             type="button"
             className="catalog-card"
             disabled={full}
+            onPointerEnter={() => preloadModel(entry.model)}
+            onFocus={() => preloadModel(entry.model)}
             onClick={() => {
               const result = app.placeFoot(entry.id)
               if (!result.ok) {
@@ -102,7 +107,7 @@ export function CatalogDrawer({
           >
             <span
               className="catalog-portrait foot-portrait"
-              style={{ color: entry.recipe.accentHex, backgroundColor: entry.recipe.skinHex }}
+              style={{ color: entry.swatch.outfitHex, backgroundColor: entry.swatch.skinHex }}
             >
               <FootIcon />
             </span>

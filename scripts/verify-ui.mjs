@@ -92,6 +92,9 @@ try {
   assert.match(await page.locator('.cap-message').innerText(), /Stage full/)
   assert.equal(await firstCatalogCard.isDisabled(), true)
 
+  // Scene labels mount only after each textured model has loaded.
+  await page.locator('.scene-label').nth(9).waitFor({ state: 'attached', timeout: 60_000 })
+
   await page.getByRole('button', { name: 'Walk', exact: true }).click()
   assert.match(await page.locator('.navigation-hint').innerText(), /W A S D/)
 
@@ -106,7 +109,7 @@ try {
   await page.locator('.mode-feet').waitFor({ state: 'visible' })
   assert.match(await page.locator('.stage-title strong').innerText(), /Oak measure table/)
   await page
-    .getByRole('button', { name: 'Add female foot', exact: true })
+    .getByRole('button', { name: 'Add female feet', exact: true })
     .evaluate((button) => button.click())
   assert.equal(await page.locator('.lineup-list li').count(), 1)
 
@@ -121,6 +124,7 @@ try {
     .getByRole('button', { name: 'Inspect', exact: true })
     .evaluate((button) => button.click())
   assert.match(await page.locator('.navigation-hint').innerText(), /Drag to pan/)
+  await page.locator('.scene-label').nth(1).waitFor({ state: 'attached', timeout: 60_000 })
 
   const feetScreenshot = await page.screenshot({
     path: `${artifactDir}/feet-desktop.png`,

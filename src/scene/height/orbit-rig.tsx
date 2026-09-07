@@ -17,7 +17,7 @@ function defaultView(world: HeightWorld): HeightOrbitSnapshot {
       ? 2.4
       : Math.max(...placements.map((placement) => placement.pose.x)) -
           Math.min(...placements.map((placement) => placement.pose.x))
-  const distance = Math.max(5.2, span * 1.3 + 3)
+  const distance = Math.max(5.2, span * 1.15 + 3.2)
   return {
     kind: 'orbit',
     target: [centerX, 0.95, 0],

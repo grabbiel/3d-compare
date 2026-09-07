@@ -10,7 +10,7 @@ function defaultView(): FeetOrbitSnapshot {
   return {
     kind: 'orbit',
     target: [0, 0.08, 0],
-    position: [0.95, 1.05, 1.25],
+    position: [1.15, 1.2, 1.55],
   }
 }
 
@@ -23,11 +23,11 @@ function selectionView(world: FeetWorld): FeetOrbitSnapshot {
   const length = selected.footLengthMm / 1000
   return {
     kind: 'orbit',
-    target: [selected.pose.x, length * 0.3, selected.pose.z],
+    target: [selected.pose.x, length * 0.6, selected.pose.z + length * 0.35],
     position: [
-      selected.pose.x + length * 1.7,
-      length * 2.1,
-      selected.pose.z + length * 2.5,
+      selected.pose.x + length * 1.9,
+      length * 2.4,
+      selected.pose.z + length * 2.9,
     ],
   }
 }
@@ -90,7 +90,7 @@ export function FeetOrbitRig({ world, rig }: { world: FeetWorld; rig: NavRig }) 
       enableDamping
       dampingFactor={0.08}
       minDistance={0.25}
-      maxDistance={3}
+      maxDistance={4}
       minPolarAngle={0.08}
       maxPolarAngle={Math.PI / 2 - 0.025}
       target={[0, 0.08, 0]}
