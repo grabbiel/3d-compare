@@ -4,8 +4,15 @@ import type { BodyRecipe } from '../../domain/catalog.ts'
 const templates = new WeakMap<BodyRecipe, THREE.Group>()
 
 function material(color: THREE.ColorRepresentation, roughness = 0.72): THREE.MeshStandardMaterial {
+  const baseColor = new THREE.Color(color)
   return new THREE.MeshStandardMaterial({
-    color,
+    color: baseColor,
+    // Keep the catalog color readable even when a browser/GPU provides a weak
+    // or incomplete lighting pass. The standard material still receives the
+    // studio lights, while this small self-lit contribution prevents figures
+    // from collapsing into dark silhouettes.
+    emissive: baseColor,
+    emissiveIntensity: 0.24,
     roughness,
     metalness: 0.02,
   })
